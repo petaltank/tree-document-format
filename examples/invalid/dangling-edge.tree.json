@@ -1,0 +1,12 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "n1",
+  "nodes": [
+    { "id": "n1", "content": "Start node" },
+    { "id": "n2", "content": "End node" }
+  ],
+  "edges": [
+    { "source": "n1", "target": "n2", "isTrunk": true },
+    { "source": "n3", "target": "n99" }
+  ]
+}

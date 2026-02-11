@@ -1,0 +1,14 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "n1",
+  "nodes": [
+    { "id": "n1", "content": "Start" },
+    { "id": "n2", "content": "Middle" },
+    { "id": "n3", "content": "End that loops back" }
+  ],
+  "edges": [
+    { "source": "n1", "target": "n2", "isTrunk": true },
+    { "source": "n2", "target": "n3", "isTrunk": true },
+    { "source": "n3", "target": "n1", "isTrunk": true }
+  ]
+}

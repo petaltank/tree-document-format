@@ -1,0 +1,231 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0d1117;
+    color: #c9d1d9;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    color: #f0f6fc;
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: #8b949e;
+    font-size: 0.95rem;
+}
+
+code {
+    background: #161b22;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #79c0ff;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.drop-zone {
+    border: 2px dashed #30363d;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+}
+
+.drop-zone:hover,
+.drop-zone.drag-over {
+    border-color: #58a6ff;
+    background: #161b22;
+}
+
+.drop-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.or {
+    color: #8b949e;
+    margin: 0.75rem 0;
+    font-size: 0.85rem;
+}
+
+.file-btn {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: #21262d;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: #c9d1d9;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.15s;
+}
+
+.file-btn:hover {
+    background: #30363d;
+}
+
+.results {
+    margin-top: 1.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.panel {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.panel h2 {
+    color: #f0f6fc;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #21262d;
+}
+
+.valid-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.valid-badge.valid {
+    background: #0d4429;
+    color: #3fb950;
+}
+
+.valid-badge.invalid {
+    background: #5a1e23;
+    color: #f85149;
+}
+
+.diag-list {
+    list-style: none;
+    margin-top: 0.75rem;
+}
+
+.diag-item {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.diag-item.error {
+    background: #2d1214;
+    border-left: 3px solid #f85149;
+}
+
+.diag-item.warning {
+    background: #2e2107;
+    border-left: 3px solid #d29922;
+}
+
+.diag-item.advisory {
+    background: #0d2141;
+    border-left: 3px solid #58a6ff;
+}
+
+.diag-rule {
+    color: #8b949e;
+    font-size: 0.8rem;
+}
+
+.diag-location {
+    color: #8b949e;
+    font-size: 0.8rem;
+    margin-top: 0.15rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.3rem 1rem;
+    font-size: 0.9rem;
+}
+
+.info-label {
+    color: #8b949e;
+}
+
+.info-value {
+    color: #f0f6fc;
+}
+
+.trunk-step {
+    padding: 0.75rem;
+    border-left: 2px solid #30363d;
+    margin-left: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.trunk-step:last-child {
+    border-left-color: transparent;
+}
+
+.trunk-step .node-id {
+    color: #79c0ff;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.trunk-step .content {
+    margin-top: 0.25rem;
+    color: #c9d1d9;
+}
+
+.trunk-step .branch-badge {
+    display: inline-block;
+    margin-top: 0.35rem;
+    padding: 0.15rem 0.5rem;
+    background: #2e2107;
+    color: #d29922;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.trunk-step .branch-labels {
+    margin-top: 0.25rem;
+    padding-left: 1rem;
+    color: #8b949e;
+    font-size: 0.85rem;
+}
+
+.trunk-step .trunk-arrow {
+    color: #3fb950;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.trunk-step .terminal {
+    color: #8b949e;
+    font-style: italic;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}

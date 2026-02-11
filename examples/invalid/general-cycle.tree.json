@@ -1,0 +1,18 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "n1",
+  "nodes": [
+    { "id": "n1", "content": "Start" },
+    { "id": "n2", "content": "Node A in cycle" },
+    { "id": "n3", "content": "Node B in cycle" },
+    { "id": "n4", "content": "Node C in cycle" },
+    { "id": "n5", "content": "End of trunk" }
+  ],
+  "edges": [
+    { "source": "n1", "target": "n2", "isTrunk": true },
+    { "source": "n2", "target": "n5", "isTrunk": true },
+    { "source": "n2", "target": "n3" },
+    { "source": "n3", "target": "n4" },
+    { "source": "n4", "target": "n2" }
+  ]
+}

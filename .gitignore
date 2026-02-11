@@ -1,0 +1,7 @@
+/target
+/web/pkg
+*.swp
+*.swo
+.DS_Store
+.claude/
+RECIPE.md

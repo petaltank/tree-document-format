@@ -1,0 +1,13 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "n1",
+  "nodes": [
+    { "id": "n1", "content": "You stand at a crossroads in the forest." },
+    { "id": "n2", "content": "You take the left path. A quiet village appears ahead." },
+    { "id": "n3", "content": "You take the right path. The trees grow darker." }
+  ],
+  "edges": [
+    { "source": "n1", "target": "n2", "isTrunk": true },
+    { "source": "n1", "target": "n3" }
+  ]
+}

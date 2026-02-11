@@ -1,0 +1,13 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "n1",
+  "nodes": [
+    { "id": "n1", "content": "Root node" },
+    { "id": "n2", "content": "Connected to root" },
+    { "id": "orphan1", "content": "I have no edges connecting me" },
+    { "id": "orphan2", "content": "Me neither" }
+  ],
+  "edges": [
+    { "source": "n1", "target": "n2", "isTrunk": true }
+  ]
+}

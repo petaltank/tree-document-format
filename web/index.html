@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Document Viewer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Tree Document Viewer</h1>
+        <p class="subtitle">Validate and view <code>.tree.json</code> files</p>
+    </header>
+
+    <main>
+        <div id="drop-zone" class="drop-zone">
+            <div class="drop-zone-content">
+                <p class="drop-icon">&#128196;</p>
+                <p>Drag &amp; drop a <code>.tree.json</code> file here</p>
+                <p class="or">or</p>
+                <label class="file-btn">
+                    Choose file
+                    <input type="file" id="file-input" accept=".json,.tree.json" hidden>
+                </label>
+            </div>
+        </div>
+
+        <div id="results" class="results hidden">
+            <section id="validation-section" class="panel">
+                <h2>Validation</h2>
+                <div id="validation-result"></div>
+            </section>
+
+            <section id="info-section" class="panel">
+                <h2>Document Info</h2>
+                <div id="info-result"></div>
+            </section>
+
+            <section id="view-section" class="panel">
+                <h2>Trunk View</h2>
+                <div id="view-result"></div>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

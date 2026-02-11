@@ -1,0 +1,29 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "start",
+  "minReaderVersion": "1.0",
+  "features": ["labels"],
+  "metadata": {
+    "title": "The Enchanted Garden",
+    "author": "Tree Doc Examples",
+    "description": "A short branching story about an enchanted garden."
+  },
+  "nodes": [
+    { "id": "start", "content": "You discover a hidden gate in the garden wall. Ivy curls around iron bars." },
+    { "id": "enter", "content": "You push the gate open and step inside. A fountain glistens at the center." },
+    { "id": "climb", "content": "You climb the wall instead. From the top, you see the entire garden laid out below." },
+    { "id": "fountain", "content": "You approach the fountain. A coin glints at the bottom of the clear water." },
+    { "id": "explore", "content": "You wander the garden paths. Flowers you've never seen bloom in impossible colors." },
+    { "id": "wish", "content": "You toss a coin into the fountain and make a wish. The water shimmers." },
+    { "id": "ending", "content": "The garden seems to respond to your presence. You feel at peace." }
+  ],
+  "edges": [
+    { "source": "start", "target": "enter", "isTrunk": true, "label": "Open the gate" },
+    { "source": "start", "target": "climb", "label": "Climb the wall" },
+    { "source": "enter", "target": "fountain", "isTrunk": true, "label": "Approach the fountain" },
+    { "source": "enter", "target": "explore", "label": "Wander the paths" },
+    { "source": "fountain", "target": "wish", "isTrunk": true, "label": "Make a wish" },
+    { "source": "wish", "target": "ending", "isTrunk": true },
+    { "source": "explore", "target": "ending" }
+  ]
+}
