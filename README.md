@@ -255,6 +255,83 @@ rustup target add wasm32-unknown-unknown
 cargo install wasm-bindgen-cli
 ```
 
+## npm Package (`@petaltank/tree-doc`)
+
+The WASM build is published as `@petaltank/tree-doc` on [GitHub Packages](https://github.com/petaltank/tree-document-format/packages). This lets you validate, view, and inspect `.tree.json` documents from any JavaScript/TypeScript project.
+
+### Consumer setup
+
+**1. Configure your project to use GitHub Packages** for the `@petaltank` scope. Create or edit `.npmrc` in your project root:
+
+```
+@petaltank:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+You'll need a GitHub personal access token with `read:packages` scope. Set it as the `GITHUB_TOKEN` environment variable, or replace `${GITHUB_TOKEN}` with the token directly.
+
+**2. Install the package:**
+
+```bash
+npm install @petaltank/tree-doc
+```
+
+**3. Use it:**
+
+```typescript
+import { validate, view, info } from "@petaltank/tree-doc";
+
+// Validate a document (WASM is loaded automatically by the bundler)
+const result = validate(jsonString);
+if (result.isValid) {
+  console.log(`Valid! ${result.stats.nodeCount} nodes, tier ${result.stats.tier}`);
+} else {
+  result.errors.forEach(e => console.error(`${e.rule}: ${e.message}`));
+}
+
+// Get trunk view
+const trunk = view(jsonString);
+trunk.steps.forEach(step => {
+  console.log(`[${step.nodeId}] ${step.content}`);
+});
+
+// Quick summary
+const summary = info(jsonString);
+console.log(`${summary.nodeCount} nodes, ${summary.edgeCount} edges, tier ${summary.tier}`);
+```
+
+All functions are fully typed — see the `index.d.ts` for `ValidateResult`, `ViewResult`, `InfoResult`, and related interfaces.
+
+### Bundler configuration
+
+**Webpack 5** — enable the `asyncWebAssembly` experiment:
+
+```js
+// webpack.config.js
+module.exports = {
+  experiments: { asyncWebAssembly: true },
+};
+```
+
+**Vite** — use `vite-plugin-wasm`:
+
+```js
+// vite.config.js
+import wasm from "vite-plugin-wasm";
+export default { plugins: [wasm()] };
+```
+
+**Next.js** — add to `next.config.js`:
+
+```js
+module.exports = {
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true };
+    return config;
+  },
+};
+```
+
 ## Tests
 
 Run the full test suite:
@@ -279,9 +356,11 @@ tree-document-format/
 │   ├── tree-doc-core/       Core library (types, parsing, validation, viewer)
 │   ├── tree-doc-cli/        CLI binary (validate, view, info commands)
 │   └── tree-doc-wasm/       WASM bindings for browser use
+├── npm/                     Source files for the @petaltank/tree-doc package
 ├── schemas/
 │   ├── tier0.schema.json    JSON Schema (Draft 2020-12) for Tier 0
 │   └── tier1.schema.json    JSON Schema (Draft 2020-12) for Tier 1
+├── scripts/                 Build and publish scripts
 ├── examples/                Valid and invalid example documents
 └── web/                     Standalone HTML/CSS/JS browser viewer
 ```
@@ -320,6 +399,7 @@ for step in &view.steps {
 - [x] CLI (`validate`, `view`, `info`)
 - [x] WASM browser viewer
 - [x] Example documents (valid + invalid)
+- [x] npm package (`@petaltank/tree-doc` on GitHub Packages)
 - [ ] Tier 2 multi-tree support
 - [ ] Published crate on crates.io
 - [ ] Stable 1.0 format spec

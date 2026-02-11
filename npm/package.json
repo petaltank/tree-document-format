@@ -1,0 +1,31 @@
+{
+  "name": "@petaltank/tree-doc",
+  "version": "0.1.0",
+  "description": "Tree Document Format — validate, view, and inspect branching .tree.json documents (WASM)",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "tree_doc_wasm.js",
+    "tree_doc_wasm.d.ts",
+    "tree_doc_wasm_bg.wasm",
+    "tree_doc_wasm_bg.wasm.d.ts"
+  ],
+  "keywords": [
+    "tree-document",
+    "wasm",
+    "validator",
+    "branching-document",
+    "interactive-fiction"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/petaltank/tree-document-format.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
