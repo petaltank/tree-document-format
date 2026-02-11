@@ -32,7 +32,10 @@ dropZone.addEventListener('drop', (e) => {
     if (file) processFile(file);
 });
 
-dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('click', (e) => {
+    if (e.target === fileInput || e.target.closest('.file-btn')) return;
+    fileInput.click();
+});
 
 fileInput.addEventListener('change', () => {
     const file = fileInput.files[0];
