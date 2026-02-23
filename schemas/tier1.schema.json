@@ -41,7 +41,29 @@
         "created": { "type": "string", "format": "date-time" },
         "modified": { "type": "string", "format": "date-time" },
         "description": { "type": "string" },
-        "tags": { "type": "array", "items": { "type": "string" } }
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "beginEndMapping": {
+          "type": "object",
+          "description": "Declares this document as a begin-to-end mapping between two specific states. When present, the document maps pathways from a beginning state to a target ending state.",
+          "required": ["beginNodeId", "endNodeId"],
+          "properties": {
+            "beginNodeId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "ID of the starting node (should match rootNodeId)"
+            },
+            "endNodeId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "ID of the target outcome node that successful paths converge on"
+            },
+            "includeDeadEnds": {
+              "type": "boolean",
+              "description": "Whether the document includes dead-end branches that do not reach the end node. When false, every leaf node should be the end node."
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": true
     }

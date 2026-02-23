@@ -25,6 +25,7 @@ pub enum Rule {
     TrunkCycle,
     GeneralCycle,
     OrphanNode,
+    DanglingBeginEnd,
 }
 
 impl fmt::Display for Rule {
@@ -36,6 +37,7 @@ impl fmt::Display for Rule {
             Rule::TrunkCycle => write!(f, "trunk-cycle"),
             Rule::GeneralCycle => write!(f, "general-cycle"),
             Rule::OrphanNode => write!(f, "orphan-node"),
+            Rule::DanglingBeginEnd => write!(f, "dangling-begin-end"),
         }
     }
 }

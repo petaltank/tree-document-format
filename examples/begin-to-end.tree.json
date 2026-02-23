@@ -1,0 +1,54 @@
+{
+  "formatVersion": "1.0",
+  "rootNodeId": "idea",
+  "minReaderVersion": "1.0",
+  "features": ["labels"],
+  "metadata": {
+    "title": "From App Idea to App Store",
+    "author": "Tree Document Format",
+    "description": "Pathways from having an app idea to getting it live in the app store, including common dead ends.",
+    "beginEndMapping": {
+      "beginNodeId": "idea",
+      "endNodeId": "app_live",
+      "includeDeadEnds": true
+    }
+  },
+  "nodes": [
+    { "id": "idea", "content": "You have an idea for a mobile app. You believe it solves a real problem and could attract users." },
+    { "id": "validate_idea", "content": "You research the market, talk to potential users, and assess whether the idea has legs." },
+    { "id": "skip_validation", "content": "You skip validation and jump straight into building. You're excited and confident.", "status": "dead_end" },
+    { "id": "build_prototype", "content": "You build a minimal prototype to test core functionality and get early feedback." },
+    { "id": "idea_invalidated", "content": "Research shows the market is saturated or the problem isn't painful enough. You shelve the idea.", "status": "dead_end" },
+    { "id": "build_mvp", "content": "You develop a minimum viable product with just enough features to test with real users." },
+    { "id": "overengineer", "content": "You spend 8 months building every feature you can imagine. No users have seen it yet.", "status": "dead_end" },
+    { "id": "beta_test", "content": "You release a beta to a small group of users. You're gathering feedback and fixing bugs." },
+    { "id": "abandon_after_feedback", "content": "Beta feedback is devastating. Users don't care about your solution. You quit.", "status": "dead_end" },
+    { "id": "prepare_submission", "content": "The app is stable, polished, and tested. You prepare your app store listing, screenshots, and metadata." },
+    { "id": "submit_to_store", "content": "You submit the app for review by the app store." },
+    { "id": "rejected_by_store", "content": "The app store rejects your submission for guideline violations." },
+    { "id": "fix_and_resubmit", "content": "You fix the guideline violations and resubmit." },
+    { "id": "give_up_after_rejection", "content": "Repeated rejections drain your motivation. The app never launches.", "status": "dead_end" },
+    { "id": "app_live", "content": "Your app is live in the app store. Users can find, download, and use it." },
+    { "id": "run_out_of_money", "content": "You run out of funding before the app is ready. Development stops.", "status": "dead_end" }
+  ],
+  "edges": [
+    { "source": "idea", "target": "validate_idea", "isTrunk": true, "label": "Research and validate" },
+    { "source": "idea", "target": "skip_validation", "label": "Skip validation, start building" },
+    { "source": "validate_idea", "target": "build_prototype", "isTrunk": true, "label": "Idea validated, build prototype" },
+    { "source": "validate_idea", "target": "idea_invalidated", "label": "Market research shows no demand" },
+    { "source": "build_prototype", "target": "build_mvp", "isTrunk": true, "label": "Prototype works, build MVP" },
+    { "source": "build_prototype", "target": "overengineer", "label": "Scope creep, build everything" },
+    { "source": "build_prototype", "target": "run_out_of_money", "label": "Funding runs out" },
+    { "source": "build_mvp", "target": "beta_test", "isTrunk": true, "label": "MVP ready, start beta" },
+    { "source": "build_mvp", "target": "run_out_of_money", "label": "Funding runs out" },
+    { "source": "beta_test", "target": "prepare_submission", "isTrunk": true, "label": "Beta successful, polish for launch" },
+    { "source": "beta_test", "target": "abandon_after_feedback", "label": "Feedback is terminal, give up" },
+    { "source": "prepare_submission", "target": "submit_to_store", "isTrunk": true, "label": "Submit for review" },
+    { "source": "submit_to_store", "target": "app_live", "isTrunk": true, "label": "Approved!" },
+    { "source": "submit_to_store", "target": "rejected_by_store", "label": "Rejected by app store" },
+    { "source": "rejected_by_store", "target": "fix_and_resubmit", "label": "Fix violations" },
+    { "source": "rejected_by_store", "target": "give_up_after_rejection", "label": "Too many rejections, give up" },
+    { "source": "fix_and_resubmit", "target": "app_live", "label": "Resubmission approved" },
+    { "source": "skip_validation", "target": "run_out_of_money", "label": "Build without direction, run out of money" }
+  ]
+}

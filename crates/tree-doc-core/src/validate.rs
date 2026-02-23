@@ -107,6 +107,9 @@ fn validate_semantics(doc: &TreeDocument) -> Vec<Diagnostic> {
     // Rule 5: Orphan nodes
     check_orphan_nodes(doc, &node_ids, &mut diagnostics);
 
+    // Rule 6: Begin-to-end mapping references
+    check_begin_end_mapping(doc, &node_ids, &mut diagnostics);
+
     diagnostics
 }
 
@@ -315,6 +318,50 @@ fn check_orphan_nodes(
     }
 }
 
+/// Rule 6: If metadata.beginEndMapping is present, validate that beginNodeId
+/// and endNodeId reference existing nodes.
+fn check_begin_end_mapping(
+    doc: &TreeDocument,
+    node_ids: &HashSet<&str>,
+    diagnostics: &mut Vec<Diagnostic>,
+) {
+    let mapping = match &doc.metadata {
+        Some(meta) => match meta.get("beginEndMapping") {
+            Some(m) => m,
+            None => return,
+        },
+        None => return,
+    };
+
+    if let Some(begin_id) = mapping.get("beginNodeId").and_then(|v| v.as_str()) {
+        if !node_ids.contains(begin_id) {
+            diagnostics.push(Diagnostic {
+                rule: Rule::DanglingBeginEnd,
+                message: format!(
+                    "metadata.beginEndMapping.beginNodeId references nonexistent node '{}'",
+                    begin_id
+                ),
+                location: Location::Root,
+                severity: Severity::Error,
+            });
+        }
+    }
+
+    if let Some(end_id) = mapping.get("endNodeId").and_then(|v| v.as_str()) {
+        if !node_ids.contains(end_id) {
+            diagnostics.push(Diagnostic {
+                rule: Rule::DanglingBeginEnd,
+                message: format!(
+                    "metadata.beginEndMapping.endNodeId references nonexistent node '{}'",
+                    end_id
+                ),
+                location: Location::Root,
+                severity: Severity::Error,
+            });
+        }
+    }
+}
+
 /// Count trunk edges to determine trunk length.
 fn compute_trunk_length(doc: &TreeDocument) -> usize {
     let root_id = match &doc.root_node_id {
@@ -473,6 +520,109 @@ mod tests {
         assert_eq!(result.stats.node_count, 1);
         assert_eq!(result.stats.edge_count, 0);
         assert_eq!(result.stats.trunk_length, 0);
+    }
+
+    #[test]
+    fn begin_end_mapping_valid() {
+        let json = r#"{
+            "formatVersion": "1.0",
+            "rootNodeId": "start",
+            "metadata": {
+                "beginEndMapping": {
+                    "beginNodeId": "start",
+                    "endNodeId": "end",
+                    "includeDeadEnds": true
+                }
+            },
+            "nodes": [
+                {"id": "start", "content": "Beginning"},
+                {"id": "middle", "content": "Middle"},
+                {"id": "end", "content": "End"},
+                {"id": "dead_end", "content": "Dead end", "status": "dead_end"}
+            ],
+            "edges": [
+                {"source": "start", "target": "middle", "isTrunk": true},
+                {"source": "middle", "target": "end", "isTrunk": true},
+                {"source": "start", "target": "dead_end"}
+            ]
+        }"#;
+        let result = validate_document(json).unwrap();
+        assert!(result.is_valid, "errors: {:?}", result.errors);
+    }
+
+    #[test]
+    fn begin_end_mapping_dangling_begin() {
+        let json = r#"{
+            "formatVersion": "1.0",
+            "rootNodeId": "n1",
+            "metadata": {
+                "beginEndMapping": {
+                    "beginNodeId": "nonexistent",
+                    "endNodeId": "n1"
+                }
+            },
+            "nodes": [
+                {"id": "n1", "content": "Only node"}
+            ],
+            "edges": []
+        }"#;
+        let result = validate_document(json).unwrap();
+        assert!(!result.is_valid);
+        assert!(result
+            .errors
+            .iter()
+            .any(|d| d.rule == Rule::DanglingBeginEnd
+                && d.message.contains("beginNodeId")));
+    }
+
+    #[test]
+    fn begin_end_mapping_dangling_end() {
+        let json = r#"{
+            "formatVersion": "1.0",
+            "rootNodeId": "n1",
+            "metadata": {
+                "beginEndMapping": {
+                    "beginNodeId": "n1",
+                    "endNodeId": "nonexistent"
+                }
+            },
+            "nodes": [
+                {"id": "n1", "content": "Only node"}
+            ],
+            "edges": []
+        }"#;
+        let result = validate_document(json).unwrap();
+        assert!(!result.is_valid);
+        assert!(result
+            .errors
+            .iter()
+            .any(|d| d.rule == Rule::DanglingBeginEnd
+                && d.message.contains("endNodeId")));
+    }
+
+    #[test]
+    fn no_begin_end_mapping_no_errors() {
+        let json = r#"{
+            "formatVersion": "1.0",
+            "rootNodeId": "n1",
+            "metadata": {"title": "No mapping here"},
+            "nodes": [{"id": "n1", "content": "Only node"}],
+            "edges": []
+        }"#;
+        let result = validate_document(json).unwrap();
+        assert!(result.is_valid);
+        assert!(!result
+            .errors
+            .iter()
+            .any(|d| d.rule == Rule::DanglingBeginEnd));
+    }
+
+    #[test]
+    fn valid_begin_end_example() {
+        let json = include_str!("../../../examples/begin-to-end.tree.json");
+        let result = validate_document(json).unwrap();
+        assert!(result.is_valid, "errors: {:?}", result.errors);
+        assert_eq!(result.stats.tier, 1);
     }
 
     #[test]
