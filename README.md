@@ -164,6 +164,7 @@ Try each example to see how the validator and viewer handle different documents:
 cargo run -p tree-doc-cli -- validate examples/minimal.tree.json
 cargo run -p tree-doc-cli -- validate examples/story.tree.json
 cargo run -p tree-doc-cli -- validate examples/empty-document.tree.json
+cargo run -p tree-doc-cli -- validate examples/begin-to-end.tree.json
 
 # Invalid documents — each triggers a different validation rule
 cargo run -p tree-doc-cli -- validate examples/invalid/missing-fields.tree.json
@@ -177,6 +178,7 @@ cargo run -p tree-doc-cli -- validate examples/invalid/orphan-node.tree.json
 cargo run -p tree-doc-cli -- view examples/minimal.tree.json
 cargo run -p tree-doc-cli -- view examples/story.tree.json
 cargo run -p tree-doc-cli -- view examples/empty-document.tree.json
+cargo run -p tree-doc-cli -- view examples/begin-to-end.tree.json
 
 # Summary info
 cargo run -p tree-doc-cli -- info examples/minimal.tree.json
@@ -198,6 +200,7 @@ The validator checks documents in two passes.
 | `trunk-cycle` | Error | The trunk path (following `isTrunk` edges from root) does not loop |
 | `general-cycle` | Warning | Strongly connected components in the full graph (cycles are valid for dialogue loops, but worth noting) |
 | `orphan-node` | Advisory | Every node is reachable from the root via edges |
+| `dangling-begin-end` | Error | If `metadata.beginEndMapping` is present, both `beginNodeId` and `endNodeId` must reference existing nodes |
 
 Errors make the document invalid (exit code 1). Warnings and advisories are informational.
 
@@ -210,6 +213,34 @@ The Tree Document Format has three tiers of complexity:
 - **Tier 2** — Multi-tree documents with `trees` map and cross-tree references *(not yet implemented)*
 
 The validator auto-detects the tier and reports it in the output.
+
+## Begin-to-End Mapping
+
+Tier 1 documents can optionally declare a **begin-to-end mapping** in their metadata. This indicates the document maps pathways between a specific starting state and a target ending state — useful for decision trees, process maps, and scenario planning.
+
+```json
+{
+  "metadata": {
+    "beginEndMapping": {
+      "beginNodeId": "idea",
+      "endNodeId": "product_launched",
+      "includeDeadEnds": true
+    }
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `beginNodeId` | string | Yes | ID of the starting node (should match `rootNodeId`) |
+| `endNodeId` | string | Yes | ID of the target outcome node that successful paths converge on |
+| `includeDeadEnds` | boolean | No | Whether the document includes dead-end branches that don't reach the end node |
+
+The validator checks that both `beginNodeId` and `endNodeId` reference existing nodes (rule: `dangling-begin-end`).
+
+Dead-end nodes — branches that terminate without reaching the end node — can be marked with `"status": "dead_end"` for easy identification. The `status` field on nodes is a free-form string; `"dead_end"` is a convention, not enforced by the validator.
+
+See `examples/begin-to-end.tree.json` for a complete example.
 
 ## Browser Viewer (WASM)
 
